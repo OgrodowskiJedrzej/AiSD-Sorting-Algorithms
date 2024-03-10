@@ -8,10 +8,9 @@ benchmark() {
     # List of supported languages and their run commands
     runrust=""
     runjava=""
-    runpython="./run"
-    runcpp=""
-    runexample="python3 example.py"
-    runcurrent=$runexample
+    runpython=""
+    runcpp="./target/debug/final"
+    runcurrent=$runcpp
 
     echo "Benchmarking Algorithm $algorithm with input $input_file"
     result=$(/opt/homebrew/opt/gnu-time/bin/gtime -f "%e" ${runcurrent} --algorithm $algorithm < $input_file 2>&1 >/dev/null)

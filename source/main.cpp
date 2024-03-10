@@ -37,109 +37,137 @@ void selection_sort(int *data, int size)
     }
 }
 
-void swap(int *data, int i, int j) {
-    int temp = data[i];
-    data[i] = data[j];
-    data[j] = temp;
-}
-
-int partition_left(int *data, int low, int high) {
+int partition_left(int *data, int low, int high)
+{
     int pivot = data[low];
     int p = low + 1;
     int q = high;
 
-    while (true) {
-        while (p <= q && data[p] <= pivot) p++;
-        while (p <= q && data[q] >= pivot) q--;
-        if (p <= q) swap(data, p, q);
-        else break;
+    while (true)
+    {
+        while (p <= q && data[p] <= pivot)
+            p++;
+        while (p <= q && data[q] >= pivot)
+            q--;
+        if (p <= q)
+            std::swap(data[p], data[q]);
+        else
+            break;
     }
 
-    swap(data, low, q);
+    std::swap(data[low], data[q]);
     return q;
 }
 
-void quick_sort_left_pivot(int *data, int low, int high) {
-    if(low < high) {
+void quick_sort_left_pivot(int *data, int low, int high)
+{
+    if (low < high)
+    {
         int pivot = partition_left(data, low, high);
-        quick_sort_left_pivot(data, low, pivot-1);
-        quick_sort_left_pivot(data, pivot+1, high);
+        quick_sort_left_pivot(data, low, pivot - 1);
+        quick_sort_left_pivot(data, pivot + 1, high);
     }
 }
 
-int partition_right(int *data, int low, int high) {
+int partition_right(int *data, int low, int high)
+{
     int pivot = data[high];
     int p = low;
-    int q = high-1;
+    int q = high - 1;
 
-    while(true) {
-        while(p <= q && data[p] <= pivot) p++;
-        while(p <= q && data[q] >= pivot) q--;
-        if(p <= q) swap(data, p, q);
-        else break;
+    while (true)
+    {
+        while (p <= q && data[p] <= pivot)
+            p++;
+        while (p <= q && data[q] >= pivot)
+            q--;
+        if (p <= q)
+            std::swap(data[p], data[q]);
+        else
+            break;
     }
 
-    swap(data, high, p);
+    std::swap(data[high], data[p]);
     return p;
 }
 
-void quick_sort_right_pivot(int *data, int low, int high) {
-    if(low < high) {
+void quick_sort_right_pivot(int *data, int low, int high)
+{
+    if (low < high)
+    {
         int pivot = partition_right(data, low, high);
-        quick_sort_right_pivot(data, low, pivot-1);
-        quick_sort_right_pivot(data, pivot+1, high);
+        quick_sort_right_pivot(data, low, pivot - 1);
+        quick_sort_right_pivot(data, pivot + 1, high);
     }
 }
 
-void shift_down(int *data, int i, int upper) {
-    while(true) {
-        int l = i*2+1;
-        int r = i*2+2;
+void shift_down(int *data, int i, int upper)
+{
+    while (true)
+    {
+        int l = i * 2 + 1;
+        int r = i * 2 + 2;
 
-        if(std::max(l, r) < upper) {
-            if(data[i] >= std::max(data[l], data[r])) {
+        if (std::max(l, r) < upper)
+        {
+            if (data[i] >= std::max(data[l], data[r]))
+            {
                 break;
             }
-            else if(data[l] > data[r]) {
-                swap(data, i, l);
+            else if (data[l] > data[r])
+            {
+                std::swap(data[i], data[l]);
                 i = l;
             }
-            else {
-                swap(data, i, r);
+            else
+            {
+                std::swap(data[i], data[r]);
                 i = r;
             }
         }
-        else if(l < upper) {
-            if(data[l] > data[i]) {
-                swap(data, i, l);
+        else if (l < upper)
+        {
+            if (data[l] > data[i])
+            {
+                std::swap(data[i], data[l]);
                 i = l;
             }
-            else {
+            else
+            {
                 break;
             }
         }
-        else if(r < upper) {
-            if(data[r] > data[i]) {
-                swap(data, i, r);
+        else if (r < upper)
+        {
+            if (data[r] > data[i])
+            {
+                std::swap(data[i], data[r]);
                 i = r;
             }
-            else {
+            else
+            {
                 break;
             }
         }
-        else {
+        else
+        {
             break;
         }
     }
 }
 
-void heap_sort(int *data, int size) {
-    for(int j=(size-2)/2; j>-1; j--) {
+void heap_sort(int *data, int size)
+{
+    std::cout << "heap sort in use"
+              << "\n";
+    for (int j = (size - 2) / 2; j > -1; j--)
+    {
         shift_down(data, j, size);
     }
 
-    for(int end=size-1; end>0; -1) {
-        swap(data, 0, end);
+    for (int end = size - 1; end > 0; end--)
+    {
+        std::swap(data[0], data[end]);
         shift_down(data, 0, end);
     }
 }
@@ -172,19 +200,29 @@ int main(int argc, char *argv[])
         data[count++] = num;
     }
 
-    // TODO Change to switch case
-    if (algorithm_number == 1)
+    switch (algorithm_number)
     {
+    case 1:
         insertion_sort(data, count);
-    }
-    else if (algorithm_number == 2)
-    {
+        break;
+    case 2:
+        // TODO shell sort
+        break;
+    case 3:
         selection_sort(data, count);
-    }
-    else
-    {
-        std::cerr << "Wrong algorithm number";
-        return 1;
+        break;
+    case 4:
+        heap_sort(data, count);
+        break;
+    case 5:
+        // TODO quick_sort_left_pivot
+        break;
+    case 6:
+        // TODO quick_sort_random_pivot
+        break;
+    default:
+        std::cerr << "Wrong algorithm number"
+                  << "\n";
     }
 
     // Print the sorted data
