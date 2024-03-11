@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+#include <stdlib.h>
 
 void insertion_sort(int *data, int size)
 {
@@ -98,6 +99,40 @@ void quick_sort_right_pivot(int *data, int low, int high)
         int pivot = partition_right(data, low, high);
         quick_sort_right_pivot(data, low, pivot - 1);
         quick_sort_right_pivot(data, pivot + 1, high);
+    }
+}
+
+int partition_random(int *data, int low, int high)
+{
+    int randIndex = rand()%(high-low+1)+low;
+    std::swap(data[high], data[randIndex]);
+    int pivot = data[high];
+    int p = low;
+    int q = high - 1;
+
+    while (true)
+    {
+        while (p <= q && data[p] <= pivot)
+            p++;
+        while (p <= q && data[q] >= pivot)
+            q--;
+        if (p <= q)
+            std::swap(data[p], data[q]);
+        else
+            break;
+    }
+
+    std::swap(data[high], data[p]);
+    return p;
+}
+
+void quick_sort_random_pivot(int *data, int low, int high)
+{
+    if (low < high)
+    {
+        int pivot = partition_random(data, low, high);
+        quick_sort_random_pivot(data, low, pivot - 1);
+        quick_sort_random_pivot(data, pivot + 1, high);
     }
 }
 
