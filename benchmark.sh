@@ -4,6 +4,7 @@
 benchmark() {
     input_file=$1
     algorithm=$2
+    input_type=$3
     algorithm_name=${algorithm_mapping_reverse[$algorithm]}
     # List of supported languages and their run commands
     runrust=""
@@ -19,7 +20,7 @@ benchmark() {
     echo $time
     size=$(head -n 1 $input_file)
     # Append results to CSV file
-    echo "$algorithm_name,$size,$time" >> data/benchmark_results.csv
+    echo "$algorithm_name,$size,$time,$input_type" >> data/benchmark_results.csv
     echo "------------------------"
 }
 
@@ -42,8 +43,8 @@ done
 
 
 # List of input file types
-#input_files=("random_array" "increasing_array" "decreasing_array" "constant_array" "a_shaped_array")
-input_files=("random_array")
+input_files=("random_array" "increasing_array" "decreasing_array" "constant_array" "a_shaped_array")
+
 
 # Create or clear the CSV file
 echo "Algorithm,InputSize,Time" > data/benchmark_results.csv
@@ -52,8 +53,8 @@ echo "Algorithm,InputSize,Time" > data/benchmark_results.csv
 for input_type in "${input_files[@]}"; do
     for algorithm_name in "${!algorithm_mapping[@]}"; do
         algorithm_number=${algorithm_mapping[$algorithm_name]}
-        for input_file in "benchmark/${input_type}_"*".txt"; do
-            benchmark $input_file $algorithm_number
+        for input_file in "data/benchmark/${input_type}_"*".txt"; do
+            benchmark $input_file $algorithm_number $input_type
         done
     done
 done
