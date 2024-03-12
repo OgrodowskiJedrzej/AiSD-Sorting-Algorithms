@@ -1,6 +1,6 @@
 #include <iostream>
 #include <algorithm>
-#include <stdlib.h>
+#include <vector>
 
 void insertion_sort(int *data, int size)
 {
@@ -18,37 +18,31 @@ void insertion_sort(int *data, int size)
     }
 }
 
-long sedgewick_expression(int k)
+std::vector<long long> generate_sedgewick_gaps(int k, int count)
 {
-    return std::pow(4, k + 1) + 3 * std::pow(2, k) + 1;
-}
-
-std::vector<long> generate_sedgewick_gaps(int k)
-{
-    std::vector<long> gaps(20);
-    for (int i = 0; i < 20; i++)
+    std::vector<long long> gaps;
+    gaps.push_back(1);
+    for (int i = 0; i <= k; i++)
     {
-        gaps[i] = sedgewick_expression(i);
+        long long gap = std::pow(4, i + 1) + 3 * std::pow(2, i) + 1;
+        if (gap > count)
+        {
+            break;
+        }
+        gaps.push_back(gap);
     }
     return gaps;
 }
-// TODO fix shell sort
-void shellSort(int *data, int size, const std::vector<long> &sedgewick_gaps)
+
+void shell_sort(int *data, int size, const std::vector<long long> &sedgewick_gaps)
 {
-    int gap_index = 0;
-
-    while (sedgewick_gaps[gap_index] < size / 3)
+    for (int gap_index = sedgewick_gaps.size() - 1; gap_index >= 0; --gap_index)
     {
-        gap_index++;
-    }
-
-    for (int gap = sedgewick_gaps[gap_index]; gap > 0; gap = sedgewick_gaps[--gap_index])
-    {
-        for (int i = gap; i < size; i += 1)
+        long long gap = sedgewick_gaps[gap_index];
+        for (int i = gap; i < size; ++i)
         {
             int temp = data[i];
             int j;
-
             for (j = i; j >= gap && data[j - gap] > temp; j -= gap)
             {
                 data[j] = data[j - gap];
@@ -231,7 +225,7 @@ int main(int argc, char *argv[])
 
     int algorithm_number = std::stoi(argv[2]);
 
-    // Read the maximum integer value from standard input
+    // reading data set size
     int max_int;
     if (!(std::cin >> max_int))
     {
@@ -239,9 +233,8 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    // reading data set
     int data[max_int];
-
-    // Read the remaining integers into the array
     int count = 0;
     int num;
     while (std::cin >> num && count < max_int)
@@ -249,6 +242,7 @@ int main(int argc, char *argv[])
         data[count++] = num;
     }
 
+    // run given algorithm
     switch (algorithm_number)
     {
     case 1:
@@ -258,8 +252,8 @@ int main(int argc, char *argv[])
     }
     case 2:
     {
-        std::vector<long> sedgewick_gaps = generate_sedgewick_gaps(20);
-        shellSort(data, count, sedgewick_gaps);
+        std::vector<long long> sedgewick_gaps = generate_sedgewick_gaps(30, count);
+        shell_sort(data, count, sedgewick_gaps);
         break;
     }
     case 3:
@@ -287,14 +281,14 @@ int main(int argc, char *argv[])
         std::cerr << "Wrong algorithm number"
                   << "\n";
     }
-
-        // Print the sorted data
-        std::cout << "Sorted data: ";
-        for (int i = 0; i < std::min(10, count); ++i)
-        {
-            std::cout << data[i] << " ";
-        }
-        std::cout << "\n";
-
-        return 0;
     }
+    // print the sorted data
+    std::cout << "Sorted data: ";
+    for (int i = 0; i < std::min(1000, count); ++i)
+    {
+        std::cout << data[i] << " ";
+    }
+    std::cout << "\n";
+
+    return 0;
+}
