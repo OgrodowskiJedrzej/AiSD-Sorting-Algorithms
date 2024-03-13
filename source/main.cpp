@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <vector>
 
-void insertion_sort(int *data, int size)
+void insertion_sort(int data[], int size)
 {
     int key, j;
     for (int i = 1; i < size; i++)
@@ -18,11 +18,11 @@ void insertion_sort(int *data, int size)
     }
 }
 
-std::vector<long long> generate_sedgewick_gaps(int k, int count)
+std::vector<long long> generate_sedgewick_gaps(int how_many_gaps, int count)
 {
     std::vector<long long> gaps;
-    gaps.push_back(1);
-    for (int i = 0; i <= k; i++)
+    gaps.push_back(1); // added 1 to make correct sequence of gaps
+    for (int i = 0; i <= how_many_gaps; i++)
     {
         long long gap = std::pow(4, i + 1) + 3 * std::pow(2, i) + 1;
         if (gap > count)
@@ -34,7 +34,7 @@ std::vector<long long> generate_sedgewick_gaps(int k, int count)
     return gaps;
 }
 
-void shell_sort(int *data, int size, const std::vector<long long> &sedgewick_gaps)
+void shell_sort(int data[], int size, const std::vector<long long> &sedgewick_gaps)
 {
     for (int gap_index = sedgewick_gaps.size() - 1; gap_index >= 0; --gap_index)
     {
@@ -52,7 +52,7 @@ void shell_sort(int *data, int size, const std::vector<long long> &sedgewick_gap
     }
 }
 
-void selection_sort(int *data, int size)
+void selection_sort(int data[], int size)
 {
     int min_idx;
     for (int i = 0; i < size - 1; i++)
@@ -72,7 +72,7 @@ void selection_sort(int *data, int size)
     }
 }
 
-int partition_left(int *data, int low, int high)
+int partition_left(int data[], int low, int high)
 {
     int pivot = data[low];
     int p = low + 1;
@@ -104,7 +104,7 @@ void quick_sort_left_pivot(int *data, int low, int high)
     }
 }
 
-int partition_random(int *data, int low, int high)
+int partition_random(int data[], int low, int high)
 {
     int rand_index = rand() % (high - low + 1) + low;
     std::swap(data[high], data[rand_index]);
@@ -136,7 +136,7 @@ int partition_random(int *data, int low, int high)
     return p;
 }
 
-void quick_sort_random_pivot(int *data, int low, int high)
+void quick_sort_random_pivot(int data[], int low, int high)
 {
     if (low < high)
     {
@@ -146,7 +146,7 @@ void quick_sort_random_pivot(int *data, int low, int high)
     }
 }
 
-void shift_down(int *data, int i, int upper)
+void shift_down(int data[], int i, int upper)
 {
     while (true)
     {
@@ -201,7 +201,7 @@ void shift_down(int *data, int i, int upper)
     }
 }
 
-void heap_sort(int *data, int size)
+void heap_sort(int data[], int size)
 {
     for (int j = (size - 2) / 2; j > -1; j--)
     {
@@ -226,18 +226,18 @@ int main(int argc, char *argv[])
     int algorithm_number = std::stoi(argv[2]);
 
     // reading data set size
-    int max_int;
-    if (!(std::cin >> max_int))
+    int data_set_size;
+    if (!(std::cin >> data_set_size))
     {
         std::cerr << "Error reading the maximum integer value\n";
         return 1;
     }
 
     // reading data set
-    int data[max_int];
+    int data[data_set_size];
     int count = 0;
     int num;
-    while (std::cin >> num && count < max_int)
+    while (std::cin >> num && count < data_set_size)
     {
         data[count++] = num;
     }
@@ -280,6 +280,7 @@ int main(int argc, char *argv[])
     {
         std::cerr << "Wrong algorithm number"
                   << "\n";
+        std::exit(0);
     }
     }
     // print the sorted data

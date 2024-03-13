@@ -47,7 +47,7 @@ input_files=("random_array" "increasing_array" "decreasing_array" "constant_arra
 
 
 # Create or clear the CSV file
-echo "Algorithm,InputSize,Time" > data/benchmark_results.csv
+echo "Algorithm,InputSize,Time,TypeOfData" > data/benchmark_results.csv
 
 # Run the benchmark for each input file, sorting algorithm, and size
 for input_type in "${input_files[@]}"; do
