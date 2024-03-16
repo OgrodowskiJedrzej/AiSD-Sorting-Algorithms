@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <vector>
 
+// insertion sort
+
 void insertion_sort(int data[], int size)
 {
     int key, j;
@@ -17,6 +19,8 @@ void insertion_sort(int data[], int size)
         data[j + 1] = key;
     }
 }
+
+// shell sort
 
 std::vector<long long> generate_sedgewick_gaps(int how_many_gaps, int count)
 {
@@ -52,6 +56,8 @@ void shell_sort(int data[], int size, const std::vector<long long> &sedgewick_ga
     }
 }
 
+// selection sort
+
 void selection_sort(int data[], int size)
 {
     int min_idx;
@@ -71,6 +77,8 @@ void selection_sort(int data[], int size)
         }
     }
 }
+
+// quick sort
 
 int partition_left(int data[], int low, int high)
 {
@@ -146,48 +154,50 @@ void quick_sort_random_pivot(int data[], int low, int high)
     }
 }
 
+// heap sort
+
 void shift_down(int data[], int i, int upper)
 {
     while (true)
     {
-        int l = i * 2 + 1;
-        int r = i * 2 + 2;
+        int left = i * 2 + 1;
+        int right = i * 2 + 2;
 
-        if (std::max(l, r) < upper)
+        if (std::max(left, right) < upper)
         {
-            if (data[i] >= std::max(data[l], data[r]))
+            if (data[i] >= std::max(data[left], data[right]))
             {
                 break;
             }
-            else if (data[l] > data[r])
+            else if (data[left] > data[right])
             {
-                std::swap(data[i], data[l]);
-                i = l;
+                std::swap(data[i], data[left]);
+                i = left;
             }
             else
             {
-                std::swap(data[i], data[r]);
-                i = r;
+                std::swap(data[i], data[right]);
+                i = right;
             }
         }
-        else if (l < upper)
+        else if (left < upper)
         {
-            if (data[l] > data[i])
+            if (data[left] > data[i])
             {
-                std::swap(data[i], data[l]);
-                i = l;
+                std::swap(data[i], data[left]);
+                i = left;
             }
             else
             {
                 break;
             }
         }
-        else if (r < upper)
+        else if (right < upper)
         {
-            if (data[r] > data[i])
+            if (data[right] > data[i])
             {
-                std::swap(data[i], data[r]);
-                i = r;
+                std::swap(data[i], data[right]);
+                i = right;
             }
             else
             {
@@ -280,9 +290,10 @@ int main(int argc, char *argv[])
     {
         std::cerr << "Wrong algorithm number"
                   << "\n";
-        std::exit(0);
+        return 1;
     }
     }
+
     // print the sorted data
     std::cout << "Sorted data: ";
     for (int i = 0; i < std::min(1000, count); ++i)
