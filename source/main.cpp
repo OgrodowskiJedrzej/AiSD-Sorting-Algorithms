@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <vector>
 #include <math.h>
+#include <cstdlib>
 
 // insertion sort
 
@@ -15,7 +16,7 @@ void insertion_sort(int data[], int size)
         while (j >= 0 && data[j] > key)
         {
             data[j + 1] = data[j];
-            j = j - 1;
+            j--;
         }
         data[j + 1] = key;
     }
@@ -23,11 +24,12 @@ void insertion_sort(int data[], int size)
 
 // shell sort
 
-std::vector<long long> generate_sedgewick_gaps(int how_many_gaps, int count)
+std::vector<long long> generate_sedgewick_gaps(int count)
 {
     std::vector<long long> gaps;
     gaps.push_back(1); // added 1 to make correct sequence of gaps
-    for (int i = 0; i <= how_many_gaps; i++)
+    int i = 0;
+    while (true)
     {
         long long gap = std::pow(4, i + 1) + 3 * std::pow(2, i) + 1;
         if (gap > count)
@@ -35,16 +37,17 @@ std::vector<long long> generate_sedgewick_gaps(int how_many_gaps, int count)
             break;
         }
         gaps.push_back(gap);
+        i++;
     }
     return gaps;
 }
 
 void shell_sort(int data[], int size, const std::vector<long long> &sedgewick_gaps)
 {
-    for (int gap_index = sedgewick_gaps.size() - 1; gap_index >= 0; --gap_index)
+    for (int gap_index = sedgewick_gaps.size() - 1; gap_index >= 0; gap_index--)
     {
         long long gap = sedgewick_gaps[gap_index];
-        for (int i = gap; i < size; ++i)
+        for (int i = gap; i < size; i++)
         {
             int temp = data[i];
             int j;
@@ -61,20 +64,20 @@ void shell_sort(int data[], int size, const std::vector<long long> &sedgewick_ga
 
 void selection_sort(int data[], int size)
 {
-    int min_idx;
+    int minIndex;
     for (int i = 0; i < size - 1; i++)
     {
-        min_idx = i;
+        minIndex = i;
         for (int j = i + 1; j < size; j++)
         {
-            if (data[j] < data[min_idx])
+            if (data[j] < data[minIndex])
             {
-                min_idx = j;
+                minIndex = j;
             }
         }
-        if (min_idx != i)
+        if (minIndex != i)
         {
-            std::swap(data[min_idx], data[i]);
+            std::swap(data[minIndex], data[i]);
         }
     }
 }
@@ -214,7 +217,7 @@ void shift_down(int data[], int i, int upper)
 
 void heap_sort(int data[], int size)
 {
-    for (int j = (size - 2) / 2; j > -1; j--)
+    for (int j = (size - 2) / 2; j >= 0; j--)
     {
         shift_down(data, j, size);
     }
@@ -263,7 +266,7 @@ int main(int argc, char *argv[])
     }
     case 2:
     {
-        std::vector<long long> sedgewick_gaps = generate_sedgewick_gaps(30, count);
+        std::vector<long long> sedgewick_gaps = generate_sedgewick_gaps(count);
         shell_sort(data, count, sedgewick_gaps);
         break;
     }
