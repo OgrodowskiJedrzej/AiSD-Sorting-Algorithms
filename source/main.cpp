@@ -158,6 +158,38 @@ void quick_sort_random_pivot(int data[], int low, int high)
     }
 }
 
+int reversed_partition_left(int data[], int low, int high)
+{
+    int pivot = data[low];
+    int p = low + 1;
+    int q = high;
+
+    while (true)
+    {
+        while (p <= q && data[p] >= pivot)
+            p++;
+        while (p <= q && data[q] <= pivot)
+            q--;
+        if (p <= q)
+            std::swap(data[p], data[q]);
+        else
+            break;
+    }
+
+    std::swap(data[low], data[q]);
+    return q;
+}
+
+void reversed_quick_sort_left_pivot(int *data, int low, int high)
+{
+    if (low < high)
+    {
+        int pivot = reversed_partition_left(data, low, high);
+        reversed_quick_sort_left_pivot(data, low, pivot - 1);
+        reversed_quick_sort_left_pivot(data, pivot + 1, high);
+    }
+}
+
 // heap sort
 
 void shift_down(int data[], int i, int upper)
