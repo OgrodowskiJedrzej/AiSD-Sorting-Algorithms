@@ -60,6 +60,25 @@ void shell_sort(int data[], int size, const std::vector<long long> &sedgewick_ga
     }
 }
 
+// change in main function if needed
+void shell_sort_inversed(int data[], int size, const std::vector<long long> &sedgewick_gaps)
+{
+    for (int gap_index = sedgewick_gaps.size() - 1; gap_index >= 0; gap_index--)
+    {
+        long long gap = sedgewick_gaps[gap_index];
+        for (int i = gap; i < size; i++)
+        {
+            int temp = data[i];
+            int j;
+            for (j = i; j >= gap && data[j - gap] < temp; j -= gap)
+            {
+                data[j] = data[j - gap];
+            }
+            data[j] = temp;
+        }
+    }
+}
+
 // selection sort
 
 void selection_sort(int data[], int size)
@@ -106,7 +125,7 @@ int partition_left(int data[], int low, int high)
     return q;
 }
 
-void quick_sort_left_pivot(int *data, int low, int high)
+void quick_sort_left_pivot(int data[], int low, int high)
 {
     if (low < high)
     {
